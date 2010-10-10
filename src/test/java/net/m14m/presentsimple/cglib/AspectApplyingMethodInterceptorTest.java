@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AspectApplyingMethodInterceptorTest {
     private List<String> log = new ArrayList<String>();
@@ -43,30 +42,6 @@ public class AspectApplyingMethodInterceptorTest {
         object.someMethod(7, "foo");
 
         assertEquals(Arrays.asList("Number 7 and String foo"), log);
-    }
-
-    @Test public void adviceCanDecideNotToRunTheMethod() {
-        SomeClass object = enhanceObject(new EveryMethod(), new Advice() {
-            public Object advise(MethodInvocation invocation) throws Throwable {
-                return null;
-            }
-        });
-
-        object.someMethod(7, "foo");
-
-        assertTrue("did not run", log.isEmpty());
-    }
-
-    @Test public void adviceCanRunTheMethodButChangeTheReturnValue() {
-        SomeClass object = enhanceObject(new EveryMethod(), new Advice() {
-            public Object advise(MethodInvocation invocation) throws Throwable {
-                return ((String) invocation.invoke()).toUpperCase();
-            }
-        });
-
-        String result = object.someMethod(7, "foo");
-
-        assertEquals("NUMBER 7 AND STRING FOO", result);
     }
 
     private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
