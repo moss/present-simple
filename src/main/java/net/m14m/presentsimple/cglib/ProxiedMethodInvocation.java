@@ -19,15 +19,15 @@ public class ProxiedMethodInvocation implements MethodInvocation {
     }
 
     public Object getReceiver() {
-        return null;
+        return receiver;
     }
 
     public Method getMethod() {
-        return null;
+        return method;
     }
 
     public Object[] getArguments() {
-        return new Object[0];
+        return arguments;
     }
 
     public Object invoke() throws Throwable {

@@ -21,7 +21,6 @@ right now:
     collection of Pointcuts.
 
 With that in mind, remaining tasks:
-* ProxiedMethodInvocation -- possibly hard test to set up
 * AspectApplyingMethodInterceptor for one aspect -- possibly hard test to set up
 * multiple aspects in AspectApplyingMethodInterceptor
 * CglibWeaver

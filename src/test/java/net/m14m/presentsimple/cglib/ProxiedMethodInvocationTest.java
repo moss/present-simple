@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.*;
 
 public class ProxiedMethodInvocationTest {
     ProxiedMethodInvocation invocation;
@@ -23,8 +24,21 @@ public class ProxiedMethodInvocationTest {
         wrapper.someMethod(3, "foo");
     }
 
-    @Test public void invokeShouldRunMethodAndReturnValue() throws Throwable {
+    @Test public void invokeReturnsValue() throws Throwable {
         assertEquals("Number 3 and String foo", invocation.invoke());
+    }
+
+    @Test public void exposesInvocationDetails() throws NoSuchMethodException {
+        assertThat("receiver", invocation.getReceiver(), instanceOf(SomeClass.class));
+        assertEquals("method", SomeClass.class.getMethod("someMethod", int.class, String.class),
+                invocation.getMethod());
+        assertArrayEquals("arguments", new Object[]{3, "foo"}, invocation.getArguments());
+    }
+
+    @Test public void allowsChangingArguments() throws Throwable {
+        invocation.getArguments()[0] = 5;
+        invocation.getArguments()[1] = "bar";
+        assertEquals("Number 5 and String bar", invocation.invoke());
     }
 
     public static class SomeClass {
