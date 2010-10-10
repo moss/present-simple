@@ -1,4 +1,4 @@
-package net.m14m.presentsimple;
+package net.m14m.presentsimple.spike;
 
 import org.junit.Before;
 import org.junit.Test;
