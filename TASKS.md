@@ -21,13 +21,13 @@ right now:
     collection of Pointcuts.
 
 With that in mind, remaining tasks:
-* AroundAdvice
-* AnnotatedAroundAspect (worth doing? Maybe.)
 * ProxiedMethodInvocation -- possibly hard test to set up
 * AspectApplyingMethodInterceptor for one aspect -- possibly hard test to set up
 * multiple aspects in AspectApplyingMethodInterceptor
 * CglibWeaver
 * Add PointcutCheckingCallbackFilter for efficiency
+* AroundAdvice
+* AnnotatedAroundAspect (worth doing? Maybe.)
 * Profile and optimize further (CallbackFilter seems like obvious low hanging fruit)
 
 * Handle nulls.

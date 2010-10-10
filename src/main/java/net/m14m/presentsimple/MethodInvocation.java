@@ -3,11 +3,11 @@ package net.m14m.presentsimple;
 import java.lang.reflect.Method;
 
 public interface MethodInvocation {
-    Method getMethod();
-
     Object getReceiver();
+
+    Method getMethod();
 
     Object[] getArguments();
 
-    Object invoke() throws Exception;
+    Object invoke() throws Throwable;
 }
