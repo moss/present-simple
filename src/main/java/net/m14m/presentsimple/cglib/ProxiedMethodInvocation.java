@@ -31,6 +31,6 @@ public class ProxiedMethodInvocation implements MethodInvocation {
     }
 
     public Object invoke() throws Throwable {
-        return proxy.invokeSuper(receiver, arguments);
+        return proxy.invoke(receiver, arguments);
     }
 }

@@ -23,10 +23,6 @@ right now:
 With that in mind, remaining tasks:
 
 * AspectApplyingMethodInterceptor -- possibly hard test to set up
-  * Advice can do stuff before and after
-  * Advice can decide not to run the method
-  * Advice can change the return value
-  * Don't apply the aspect when it doesn't match
   * Handle multiple aspects on the same method
 * CglibWeaver
 * Add PointcutCheckingCallbackFilter for efficiency
@@ -45,3 +41,4 @@ With that in mind, remaining tasks:
 * Package as jar.
 * Distribute through Maven somehow?
 * Expose the annotation to annotated aspects, so that it can add metadata?
+* Do we really have to define a no-arg constructor for this to work? Must it be public?

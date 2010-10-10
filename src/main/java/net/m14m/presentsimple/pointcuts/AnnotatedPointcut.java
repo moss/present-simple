@@ -1,4 +1,6 @@
-package net.m14m.presentsimple;
+package net.m14m.presentsimple.pointcuts;
+
+import net.m14m.presentsimple.Pointcut;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;

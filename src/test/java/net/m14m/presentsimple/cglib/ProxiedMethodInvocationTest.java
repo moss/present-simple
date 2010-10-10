@@ -15,9 +15,10 @@ public class ProxiedMethodInvocationTest {
     ProxiedMethodInvocation invocation;
 
     @Before public void setUpInvocation() {
+        final SomeClass instanceBeingDecorated = new SomeClass();
         SomeClass wrapper = (SomeClass) Enhancer.create(SomeClass.class, new MethodInterceptor() {
             public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                invocation = new ProxiedMethodInvocation(obj, method, args, proxy);
+                invocation = new ProxiedMethodInvocation(instanceBeingDecorated, method, args, proxy);
                 return "Ignored return value from wrapper";
             }
         });
