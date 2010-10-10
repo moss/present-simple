@@ -21,8 +21,13 @@ right now:
     collection of Pointcuts.
 
 With that in mind, remaining tasks:
-* AspectApplyingMethodInterceptor for one aspect -- possibly hard test to set up
-* multiple aspects in AspectApplyingMethodInterceptor
+
+* AspectApplyingMethodInterceptor -- possibly hard test to set up
+  * Advice can do stuff before and after
+  * Advice can decide not to run the method
+  * Advice can change the return value
+  * Don't apply the aspect when it doesn't match
+  * Handle multiple aspects on the same method
 * CglibWeaver
 * Add PointcutCheckingCallbackFilter for efficiency
 * AroundAdvice
