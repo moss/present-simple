@@ -21,7 +21,6 @@ right now:
     collection of Pointcuts.
 
 With that in mind, remaining tasks:
-* Sketch out interfaces a bit (is this premature? Dunno, it seems fair in this case.)
 * AnnotatedPointcut
 * AroundAdvice
 * AnnotatedAroundAspect (worth doing? Maybe.)
