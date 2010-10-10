@@ -19,6 +19,11 @@ public class AnnotatedPointcutTest {
         assertFalse(pointcut.matches(Sample.class.getMethod("notAnnotated")));
     }
 
+    @Test(expected = Exception.class) public void
+    shouldFailFastIfCreatedWithAnAnnotationThatIsNotRetainedAtRuntime() {
+        new AnnotatedPointcut(UnretainedAnnotation.class);
+    }
+
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AnAnnotation {
     }
@@ -27,5 +32,8 @@ public class AnnotatedPointcutTest {
         @AnAnnotation public void annotated() {}
 
         public void notAnnotated() {}
+    }
+
+    public @interface UnretainedAnnotation {
     }
 }

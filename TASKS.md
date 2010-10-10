@@ -21,8 +21,6 @@ right now:
     collection of Pointcuts.
 
 With that in mind, remaining tasks:
-* AnnotatedPointcut
-* Fail fast when given an annotation without runtime retention.
 * AroundAdvice
 * AnnotatedAroundAspect (worth doing? Maybe.)
 * ProxiedMethodInvocation -- possibly hard test to set up
