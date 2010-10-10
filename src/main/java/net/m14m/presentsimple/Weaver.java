@@ -14,15 +14,11 @@ public class Weaver {
     }
 
     public <T> T weaveAspectsInto(T object) {
-        for (Aspect aspect : aspects) {
-            object = decorateObjectWith(aspect, object);
-        }
-        return object;
+        return decorateObjectWith(aspects[0], object);
     }
 
     private <T> T decorateObjectWith(final Aspect aspect, final T object) {
-        Enhancer enhancer = new Enhancer();
-        return (T) enhancer.create(object.getClass(), new AspectApplyingMethodInterceptor(aspect, object));
+        return (T) Enhancer.create(object.getClass(), null, new AspectApplyingMethodInterceptor(aspect));
     }
 
     private static class ProxiedMethodInvocation implements MethodInvocation {
@@ -39,7 +35,7 @@ public class Weaver {
         }
 
         public Object invoke() throws Throwable {
-            return proxy.invoke(object, args);
+            return proxy.invokeSuper(object, args);
         }
 
         public Method getMethod() {
@@ -49,16 +45,14 @@ public class Weaver {
 
     private static class AspectApplyingMethodInterceptor implements MethodInterceptor {
         private final Aspect aspect;
-        private final Object object;
 
-        public AspectApplyingMethodInterceptor(Aspect aspect, Object object) {
+        public AspectApplyingMethodInterceptor(Aspect aspect) {
             this.aspect = aspect;
-            this.object = object;
         }
 
-        public Object intercept(Object obj, Method method, final Object[] args, final MethodProxy proxy) throws Throwable {
+        public Object intercept(Object object, Method method, final Object[] args, final MethodProxy proxy) throws Throwable {
             if (annotated(method)) return aspect.intercept(new ProxiedMethodInvocation(proxy, method, object, args));
-            return proxy.invoke(object, args);
+            return proxy.invokeSuper(object, args);
         }
 
         private boolean annotated(Method method) {
