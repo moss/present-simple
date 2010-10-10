@@ -17,14 +17,7 @@ public class AspectApplyingMethodInterceptorTest {
     private SomeClass objectToEnhance = new SomeClass(log);
 
     @Test public void adviceCanDoStuffBeforeAndAfterTheMethodInvocation() {
-        SomeClass object = enhanceObject(new EveryMethod(), new Advice() {
-            public Object advise(MethodInvocation invocation) throws Throwable {
-                log.add("before");
-                Object result = invocation.invoke();
-                log.add("after");
-                return result;
-            }
-        });
+        SomeClass object = enhanceObject(new EveryMethod(), new LoggingAdvice());
 
         object.someMethod(7, "foo");
 
@@ -32,16 +25,12 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     @Test public void ignoresAdviceIfThePointcutDoesNotApply() {
-        SomeClass object = enhanceObject(new NoMethod(), new Advice() {
-            public Object advise(MethodInvocation invocation) throws Throwable {
-                log.add("Oops! You listened to the advice!");
-                return invocation.invoke();
-            }
-        });
+        SomeClass object = enhanceObject(new NoMethod(), new LoggingAdvice());
 
-        object.someMethod(7, "foo");
+        String result = object.someMethod(7, "foo");
 
         assertEquals(Arrays.asList("Number 7 and String foo"), log);
+        assertEquals("Number 7 and String foo", result);
     }
 
     private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
@@ -66,4 +55,12 @@ public class AspectApplyingMethodInterceptorTest {
         }
     }
 
+    private class LoggingAdvice implements Advice {
+        public Object advise(MethodInvocation invocation) throws Throwable {
+            log.add("before");
+            Object result = invocation.invoke();
+            log.add("after");
+            return result;
+        }
+    }
 }
