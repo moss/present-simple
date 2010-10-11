@@ -22,10 +22,8 @@ right now:
 
 With that in mind, remaining tasks:
 
-* Add PointcutCheckingCallbackFilter for efficiency
 * AroundAdvice
 * AnnotatedAroundAspect (worth doing? Maybe.)
-* Profile and optimize further (CallbackFilter seems like obvious low hanging fruit)
 
 * Handle nulls.
 * Make sure it doesn't do anything for unannotated methods.
@@ -40,3 +38,4 @@ With that in mind, remaining tasks:
 * Expose the annotation to annotated aspects, so that it can add metadata?
 * Do we really have to define a no-arg constructor for this to work? Must it be public?
 * Any unit level tests needed for AdviceDecoratedMethodInvocation or AspectInvocationEnhancer? Better names?
+* Profile and optimize?
