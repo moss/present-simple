@@ -4,7 +4,6 @@ import net.m14m.presentsimple.*;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
 import net.sf.cglib.proxy.Enhancer;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class AspectApplyingMethodInterceptorTest {
         assertEquals("Number 7 and String foo", result);
     }
 
-    @Test @Ignore public void appliesMultipleAspects() {
+    @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() {
         SomeClass object = enhanceObject(
                 new SimpleAspect(new EveryMethod(), new LoggingAdvice("Log 1")),
                 new SimpleAspect(new NoMethod(), new LoggingAdvice("Ignored Log")),
@@ -44,11 +43,11 @@ public class AspectApplyingMethodInterceptorTest {
         object.someMethod(7, "foo");
 
         assertEquals(Arrays.asList(
-                "Log 1: before",
                 "Log 2: before",
+                "Log 1: before",
                 "Number 7 and String foo",
-                "Log 2: after",
-                "Log 1: after"
+                "Log 1: after",
+                "Log 2: after"
         ), log);
     }
 

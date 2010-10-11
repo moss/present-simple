@@ -22,8 +22,6 @@ right now:
 
 With that in mind, remaining tasks:
 
-* AspectApplyingMethodInterceptor -- possibly hard test to set up
-  * Handle multiple aspects on the same method
 * CglibWeaver
 * Add PointcutCheckingCallbackFilter for efficiency
 * AroundAdvice
