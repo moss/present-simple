@@ -4,6 +4,7 @@ import net.m14m.presentsimple.*;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
 import net.sf.cglib.proxy.Enhancer;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -33,9 +34,31 @@ public class AspectApplyingMethodInterceptorTest {
         assertEquals("Number 7 and String foo", result);
     }
 
+    @Test @Ignore public void appliesMultipleAspects() {
+        SomeClass object = enhanceObject(
+                new SimpleAspect(new EveryMethod(), new LoggingAdvice("Log 1")),
+                new SimpleAspect(new NoMethod(), new LoggingAdvice("Ignored Log")),
+                new SimpleAspect(new EveryMethod(), new LoggingAdvice("Log 2"))
+        );
+
+        object.someMethod(7, "foo");
+
+        assertEquals(Arrays.asList(
+                "Log 1: before",
+                "Log 2: before",
+                "Number 7 and String foo",
+                "Log 2: after",
+                "Log 1: after"
+        ), log);
+    }
+
     private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
         Aspect aspect = new SimpleAspect(pointcut, advice);
-        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(objectToEnhance, aspect);
+        return enhanceObject(aspect);
+    }
+
+    private SomeClass enhanceObject(Aspect... aspects) {
+        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(objectToEnhance, aspects);
         return (SomeClass) Enhancer.create(SomeClass.class, interceptor);
     }
 
@@ -56,10 +79,20 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     private class LoggingAdvice implements Advice {
+        private String prefix;
+
+        LoggingAdvice(String name) {
+            this.prefix = name + ": ";
+        }
+
+        LoggingAdvice() {
+            this.prefix = "";
+        }
+
         public Object advise(MethodInvocation invocation) throws Throwable {
-            log.add("before");
+            log.add(prefix + "before");
             Object result = invocation.invoke();
-            log.add("after");
+            log.add(prefix + "after");
             return result;
         }
     }
