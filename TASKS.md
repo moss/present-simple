@@ -22,7 +22,6 @@ right now:
 
 With that in mind, remaining tasks:
 
-* CglibWeaver
 * Add PointcutCheckingCallbackFilter for efficiency
 * AroundAdvice
 * AnnotatedAroundAspect (worth doing? Maybe.)
