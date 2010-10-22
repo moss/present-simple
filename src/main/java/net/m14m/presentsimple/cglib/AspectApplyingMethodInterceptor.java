@@ -8,17 +8,17 @@ import java.lang.reflect.Method;
 
 public class AspectApplyingMethodInterceptor implements MethodInterceptor {
     private final Object delegate;
-    private final AspectInvocationEnhancer[] enhancers;
+    private final Aspect[] aspects;
 
-    public AspectApplyingMethodInterceptor(Object delegate, AspectInvocationEnhancer... enhancers) {
+    public AspectApplyingMethodInterceptor(Object delegate, Aspect... aspects) {
         this.delegate = delegate;
-        this.enhancers = enhancers;
+        this.aspects = aspects;
     }
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         MethodInvocation invocation = new ProxiedMethodInvocation(delegate, method, args, proxy);
-        for (AspectInvocationEnhancer enhancer : enhancers) {
-            invocation = enhancer.wrap(invocation);
+        for (Aspect aspect : aspects) {
+            invocation = aspect.decorate(invocation);
         }
         return invocation.invoke();
     }

@@ -37,9 +37,9 @@ public class AspectApplyingMethodInterceptorTest {
 
     @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() {
         SomeClass object = enhanceObject(
-                new AspectInvocationEnhancer(new EveryMethod(), new LoggingAdvice("Log 1")),
-                new AspectInvocationEnhancer(new NoMethod(), new LoggingAdvice("Ignored Log")),
-                new AspectInvocationEnhancer(new EveryMethod(), new LoggingAdvice("Log 2"))
+                new Aspect(new EveryMethod(), new LoggingAdvice("Log 1")),
+                new Aspect(new NoMethod(), new LoggingAdvice("Ignored Log")),
+                new Aspect(new EveryMethod(), new LoggingAdvice("Log 2"))
         );
 
         object.someMethod(7, "foo");
@@ -54,10 +54,10 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
-        return enhanceObject(new AspectInvocationEnhancer(pointcut, advice));
+        return enhanceObject(new Aspect(pointcut, advice));
     }
 
-    private SomeClass enhanceObject(AspectInvocationEnhancer... aspects) {
+    private SomeClass enhanceObject(Aspect... aspects) {
         AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(objectToEnhance, aspects);
         return (SomeClass) Enhancer.create(SomeClass.class, interceptor);
     }

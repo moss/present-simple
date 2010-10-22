@@ -4,16 +4,16 @@ import net.m14m.presentsimple.Advice;
 import net.m14m.presentsimple.MethodInvocation;
 import net.m14m.presentsimple.Pointcut;
 
-public class AspectInvocationEnhancer {
+public class Aspect {
     private Pointcut pointcut;
     private Advice advice;
 
-    public AspectInvocationEnhancer(Pointcut pointcut, Advice advice) {
+    public Aspect(Pointcut pointcut, Advice advice) {
         this.pointcut = pointcut;
         this.advice = advice;
     }
 
-    public MethodInvocation wrap(MethodInvocation invocation) {
+    public MethodInvocation decorate(MethodInvocation invocation) {
         if (!pointcutMatches(invocation)) return invocation;
         return new AdviceDecoratedMethodInvocation(invocation, advice);
     }
