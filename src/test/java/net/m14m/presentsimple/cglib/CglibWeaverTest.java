@@ -1,6 +1,7 @@
 package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Advice;
+import net.m14m.presentsimple.AppliesTo;
 import net.m14m.presentsimple.MethodInvocation;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +17,8 @@ public class CglibWeaverTest {
 
     @Before public void setUpWeaver() {
         weaver = new CglibWeaver();
-        weaver.register(Logged.class, new StringDecoratingAdvice("Logged(%s)"));
-        weaver.register(Transactional.class, new StringDecoratingAdvice("Transactional(%s)"));
+        weaver.register(new LoggedAdvice());
+        weaver.register(new TransactionalAdvice());
     }
 
     @Test public void shouldWeaveAppropriateAspectsIntoClass() {
@@ -32,8 +33,22 @@ public class CglibWeaverTest {
     public @interface Logged {
     }
 
+    @AppliesTo(Logged.class)
+    private static class LoggedAdvice extends StringDecoratingAdvice {
+        public LoggedAdvice() {
+            super("Logged(%s)");
+        }
+    }
+
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Transactional {
+    }
+
+    @AppliesTo(Transactional.class)
+    private static class TransactionalAdvice extends StringDecoratingAdvice {
+        public TransactionalAdvice() {
+            super("Transactional(%s)");
+        }
     }
 
     public static class SampleClass {
@@ -44,10 +59,6 @@ public class CglibWeaverTest {
         @Logged @Transactional public String clearDatabase() { return "clearDatabase()"; }
 
         public String sayHello() { return "sayHello()"; }
-    }
-
-    public static class BoringClass {
-        public String greet() { return "Hello there."; }
     }
 
     private static class StringDecoratingAdvice implements Advice {
