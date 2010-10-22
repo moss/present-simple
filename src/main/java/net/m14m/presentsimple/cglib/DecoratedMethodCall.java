@@ -27,6 +27,6 @@ public class DecoratedMethodCall implements MethodCall {
     }
 
     public Object invoke() throws Throwable {
-        return decorator.advise(call);
+        return decorator.intercept(call);
     }
 }

@@ -68,7 +68,7 @@ public class CglibWeaverTest {
             this.format = format;
         }
 
-        public Object advise(MethodCall call) throws Throwable {
+        public Object intercept(MethodCall call) throws Throwable {
             return String.format(format, call.invoke());
         }
     }

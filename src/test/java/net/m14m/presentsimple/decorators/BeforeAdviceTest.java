@@ -1,4 +1,4 @@
-package net.m14m.presentsimple.advice;
+package net.m14m.presentsimple.decorators;
 
 import net.m14m.presentsimple.MethodCall;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class BeforeAdviceTest {
             }
         };
 
-        advice.advise(new NamedMethodCall(this, "myMethod", 5));
+        advice.intercept(new NamedMethodCall(this, "myMethod", 5));
 
         assertEquals("should have run interceptor and method", Arrays.asList("before", "number 5"), log);
     }
@@ -39,7 +39,7 @@ public class BeforeAdviceTest {
             }
         };
 
-        advice.advise(new NamedMethodCall(this, "myMethod", expectedArgument));
+        advice.intercept(new NamedMethodCall(this, "myMethod", expectedArgument));
     }
 
     public String myMethod(Integer number) {

@@ -89,7 +89,7 @@ public class AspectApplyingMethodInterceptorTest {
             this.prefix = "";
         }
 
-        public Object advise(MethodCall call) throws Throwable {
+        public Object intercept(MethodCall call) throws Throwable {
             log.add(prefix + "before");
             Object result = call.invoke();
             log.add(prefix + "after");
