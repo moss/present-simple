@@ -21,8 +21,8 @@ public class CglibWeaverTest {
         weaver.register(new TransactionalDecorator());
     }
 
-    @Test public void shouldWeaveAppropriateAspectsIntoClass() {
-        SampleClass sample = weaver.weave(new SampleClass());
+    @Test public void shouldDecorateAnnotatedMethods() {
+        SampleClass sample = weaver.decorate(new SampleClass());
         assertEquals("Logged(contactServer())", sample.contactServer());
         assertEquals("Transactional(saveChanges())", sample.saveChanges());
         assertEquals("Transactional(Logged(clearDatabase()))", sample.clearDatabase());
@@ -34,9 +34,9 @@ public class CglibWeaverTest {
     }
 
     @AppliesTo(Logged.class)
-    private static class LoggingDecorator extends StringFormatDecorator {
-        public LoggingDecorator() {
-            super("Logged(%s)");
+    private static class LoggingDecorator implements Decorator {
+        public Object intercept(MethodCall call) throws Throwable {
+            return String.format("Logged(%s)", call.invoke());
         }
     }
 
@@ -45,9 +45,9 @@ public class CglibWeaverTest {
     }
 
     @AppliesTo(Transactional.class)
-    private static class TransactionalDecorator extends StringFormatDecorator {
-        public TransactionalDecorator() {
-            super("Transactional(%s)");
+    private static class TransactionalDecorator implements Decorator {
+        public Object intercept(MethodCall call) throws Throwable {
+            return String.format("Transactional(%s)", call.invoke());
         }
     }
 
@@ -61,15 +61,4 @@ public class CglibWeaverTest {
         public String sayHello() { return "sayHello()"; }
     }
 
-    private static class StringFormatDecorator implements Decorator {
-        private String format;
-
-        public StringFormatDecorator(String format) {
-            this.format = format;
-        }
-
-        public Object intercept(MethodCall call) throws Throwable {
-            return String.format(format, call.invoke());
-        }
-    }
 }

@@ -22,7 +22,7 @@ public class CglibWeaver implements Weaver {
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> T weave(T object) {
+    public <T> T decorate(T object) {
         AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(object, arrayOfAspects());
         return (T) Enhancer.create(object.getClass(), interceptor);
     }
