@@ -1,17 +1,21 @@
 package net.m14m.presentsimple.cglib;
 
+import net.m14m.presentsimple.Advice;
 import net.m14m.presentsimple.Aspect;
+import net.m14m.presentsimple.SimpleAspect;
 import net.m14m.presentsimple.Weaver;
+import net.m14m.presentsimple.pointcuts.AnnotatedPointcut;
 import net.sf.cglib.proxy.Enhancer;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CglibWeaver implements Weaver {
     private List<Aspect> aspects = new ArrayList<Aspect>();
 
-    public void register(Aspect aspect) {
-        aspects.add(aspect);
+    public void register(Class<? extends Annotation> annotation, Advice advice) {
+        aspects.add(new SimpleAspect(new AnnotatedPointcut(annotation), advice));
     }
 
     @SuppressWarnings({"unchecked"})

@@ -2,12 +2,9 @@ package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Advice;
 import net.m14m.presentsimple.MethodInvocation;
-import net.m14m.presentsimple.SimpleAspect;
-import net.m14m.presentsimple.pointcuts.AnnotatedPointcut;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -19,8 +16,8 @@ public class CglibWeaverTest {
 
     @Before public void setUpWeaver() {
         weaver = new CglibWeaver();
-        register(Logged.class, "Logged(%s)");
-        register(Transactional.class, "Transactional(%s)");
+        weaver.register(Logged.class, new StringDecoratingAdvice("Logged(%s)"));
+        weaver.register(Transactional.class, new StringDecoratingAdvice("Transactional(%s)"));
     }
 
     @Test public void shouldWeaveAppropriateAspectsIntoClass() {
@@ -29,10 +26,6 @@ public class CglibWeaverTest {
         assertEquals("Transactional(saveChanges())", sample.saveChanges());
         assertEquals("Transactional(Logged(clearDatabase()))", sample.clearDatabase());
         assertEquals("sayHello()", sample.sayHello());
-    }
-
-    private void register(Class<? extends Annotation> annotation, String format) {
-        weaver.register(new SimpleAspect(new AnnotatedPointcut(annotation), new StringDecoratingAdvice(format)));
     }
 
     @Retention(RetentionPolicy.RUNTIME)
