@@ -2,7 +2,7 @@ package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.AppliesTo;
 import net.m14m.presentsimple.Decorator;
-import net.m14m.presentsimple.MethodInvocation;
+import net.m14m.presentsimple.MethodCall;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,8 +68,8 @@ public class CglibWeaverTest {
             this.format = format;
         }
 
-        public Object advise(MethodInvocation invocation) throws Throwable {
-            return String.format(format, invocation.invoke());
+        public Object advise(MethodCall call) throws Throwable {
+            return String.format(format, call.invoke());
         }
     }
 }

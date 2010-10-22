@@ -1,7 +1,7 @@
 package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Decorator;
-import net.m14m.presentsimple.MethodInvocation;
+import net.m14m.presentsimple.MethodCall;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
 import net.m14m.presentsimple.pointcuts.Pointcut;
@@ -89,9 +89,9 @@ public class AspectApplyingMethodInterceptorTest {
             this.prefix = "";
         }
 
-        public Object advise(MethodInvocation invocation) throws Throwable {
+        public Object advise(MethodCall call) throws Throwable {
             log.add(prefix + "before");
-            Object result = invocation.invoke();
+            Object result = call.invoke();
             log.add(prefix + "after");
             return result;
         }

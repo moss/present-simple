@@ -5,11 +5,11 @@ right now:
 * Pure AOP pieces:
   * Pointcut: something that decides whether an aspect applies to a given method.
     One implementation so far: AnnotationPointcut.
-  * Advice: something that wraps a method invocation and adds extra behaviour to it.
+  * Advice: something that wraps a method call and adds extra behaviour to it.
     Implementations: AroundAdvice, BeforeAdvice, AfterAdvice.
   * MethodInvocation: what it says on the tin. Lets you see the method. Lets you see the arguments.
     Lets you see the method receiver. Lets you tamper with the arguments.
-    Lets you go ahead with the invocation.
+    Lets you go ahead with the call.
   * Aspect: a combination of a pointcut and decorator.
   * Weaver: a place where aspects can be registered and then applied to objects.
     One implementation...

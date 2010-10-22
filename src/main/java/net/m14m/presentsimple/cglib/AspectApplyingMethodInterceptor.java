@@ -1,6 +1,6 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.MethodInvocation;
+import net.m14m.presentsimple.MethodCall;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -16,11 +16,11 @@ public class AspectApplyingMethodInterceptor implements MethodInterceptor {
     }
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        MethodInvocation invocation = new ProxiedMethodInvocation(delegate, method, args, proxy);
+        MethodCall call = new ProxiedMethodCall(delegate, method, args, proxy);
         for (Aspect aspect : aspects) {
-            invocation = aspect.decorate(invocation);
+            call = aspect.decorate(call);
         }
-        return invocation.invoke();
+        return call.invoke();
     }
 
 }

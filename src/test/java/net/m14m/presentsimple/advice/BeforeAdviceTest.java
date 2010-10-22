@@ -1,6 +1,6 @@
 package net.m14m.presentsimple.advice;
 
-import net.m14m.presentsimple.MethodInvocation;
+import net.m14m.presentsimple.MethodCall;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -21,7 +21,7 @@ public class BeforeAdviceTest {
             }
         };
 
-        advice.advise(new NamedMethodInvocation(this, "myMethod", 5));
+        advice.advise(new NamedMethodCall(this, "myMethod", 5));
 
         assertEquals("should have run interceptor and method", Arrays.asList("before", "number 5"), log);
     }
@@ -39,7 +39,7 @@ public class BeforeAdviceTest {
             }
         };
 
-        advice.advise(new NamedMethodInvocation(this, "myMethod", expectedArgument));
+        advice.advise(new NamedMethodCall(this, "myMethod", expectedArgument));
     }
 
     public String myMethod(Integer number) {
@@ -48,12 +48,12 @@ public class BeforeAdviceTest {
         return result;
     }
 
-    public static class NamedMethodInvocation implements MethodInvocation {
+    public static class NamedMethodCall implements MethodCall {
         private final Object receiver;
         private final Object[] arguments;
         private Method method;
 
-        public NamedMethodInvocation(Object receiver, String methodName, Object... arguments) throws NoSuchMethodException {
+        public NamedMethodCall(Object receiver, String methodName, Object... arguments) throws NoSuchMethodException {
             this.receiver = receiver;
             this.arguments = arguments;
             method = receiver.getClass().getMethod(methodName, argumentTypes());

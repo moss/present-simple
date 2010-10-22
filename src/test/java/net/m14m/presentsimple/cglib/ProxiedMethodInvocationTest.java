@@ -12,13 +12,13 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 public class ProxiedMethodInvocationTest {
-    ProxiedMethodInvocation invocation;
+    ProxiedMethodCall invocation;
 
     @Before public void setUpInvocation() {
         final SomeClass instanceBeingDecorated = new SomeClass();
         SomeClass wrapper = (SomeClass) Enhancer.create(SomeClass.class, new MethodInterceptor() {
             public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                invocation = new ProxiedMethodInvocation(instanceBeingDecorated, method, args, proxy);
+                invocation = new ProxiedMethodCall(instanceBeingDecorated, method, args, proxy);
                 return "Ignored return value from wrapper";
             }
         });
