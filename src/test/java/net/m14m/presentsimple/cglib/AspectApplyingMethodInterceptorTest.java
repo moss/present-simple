@@ -1,6 +1,8 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.*;
+import net.m14m.presentsimple.Advice;
+import net.m14m.presentsimple.MethodInvocation;
+import net.m14m.presentsimple.Pointcut;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
 import net.sf.cglib.proxy.Enhancer;
@@ -35,9 +37,9 @@ public class AspectApplyingMethodInterceptorTest {
 
     @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() {
         SomeClass object = enhanceObject(
-                new SimpleAspect(new EveryMethod(), new LoggingAdvice("Log 1")),
-                new SimpleAspect(new NoMethod(), new LoggingAdvice("Ignored Log")),
-                new SimpleAspect(new EveryMethod(), new LoggingAdvice("Log 2"))
+                new AspectInvocationEnhancer(new EveryMethod(), new LoggingAdvice("Log 1")),
+                new AspectInvocationEnhancer(new NoMethod(), new LoggingAdvice("Ignored Log")),
+                new AspectInvocationEnhancer(new EveryMethod(), new LoggingAdvice("Log 2"))
         );
 
         object.someMethod(7, "foo");
@@ -52,11 +54,10 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
-        Aspect aspect = new SimpleAspect(pointcut, advice);
-        return enhanceObject(aspect);
+        return enhanceObject(new AspectInvocationEnhancer(pointcut, advice));
     }
 
-    private SomeClass enhanceObject(Aspect... aspects) {
+    private SomeClass enhanceObject(AspectInvocationEnhancer... aspects) {
         AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(objectToEnhance, aspects);
         return (SomeClass) Enhancer.create(SomeClass.class, interceptor);
     }

@@ -1,7 +1,6 @@
 package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Advice;
-import net.m14m.presentsimple.Aspect;
 import net.m14m.presentsimple.MethodInvocation;
 import net.m14m.presentsimple.Pointcut;
 
@@ -9,9 +8,9 @@ public class AspectInvocationEnhancer {
     private Pointcut pointcut;
     private Advice advice;
 
-    public AspectInvocationEnhancer(Aspect aspect) {
-        pointcut = aspect.getPointcut();
-        advice = aspect.getAdvice();
+    public AspectInvocationEnhancer(Pointcut pointcut, Advice advice) {
+        this.pointcut = pointcut;
+        this.advice = advice;
     }
 
     public MethodInvocation wrap(MethodInvocation invocation) {

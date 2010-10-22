@@ -1,6 +1,5 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.Aspect;
 import net.m14m.presentsimple.MethodInvocation;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -11,12 +10,9 @@ public class AspectApplyingMethodInterceptor implements MethodInterceptor {
     private final Object delegate;
     private final AspectInvocationEnhancer[] enhancers;
 
-    public AspectApplyingMethodInterceptor(Object delegate, Aspect... aspects) {
+    public AspectApplyingMethodInterceptor(Object delegate, AspectInvocationEnhancer... enhancers) {
         this.delegate = delegate;
-        enhancers = new AspectInvocationEnhancer[aspects.length];
-        for (int i = 0; i < aspects.length; i++) {
-            enhancers[i] = new AspectInvocationEnhancer(aspects[i]);
-        }
+        this.enhancers = enhancers;
     }
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
