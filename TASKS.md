@@ -39,3 +39,13 @@ With that in mind, remaining tasks:
 * Do we really have to define a no-arg constructor for this to work? Must it be public?
 * Any unit level tests needed for AdviceDecoratedMethodInvocation or AspectInvocationEnhancer? Better names?
 * Profile and optimize?
+
+Notes from code review:
+
+* Get away from AOP language: this is essentially Python-style decorators for Java. That's a much simpler way to
+  present it.
+* Ditch Aspect as a user-facing class--it could be purely internal, and absorbed into AspectInvocationEnhancer.
+* Need to support anything but annotated pointcuts? Honestly, maybe not.
+* Python swallowing a coffee cup logo.
+* (Not from code review but) maybe instead of making instances we should make classes? Then internal method calls
+  could work correctly, and might fit in more happily with Pico, etc. Possibly harder to use, though?
