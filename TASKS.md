@@ -10,7 +10,7 @@ right now:
   * MethodInvocation: what it says on the tin. Lets you see the method. Lets you see the arguments.
     Lets you see the method receiver. Lets you tamper with the arguments.
     Lets you go ahead with the invocation.
-  * Aspect: a combination of a pointcut and advice.
+  * Aspect: a combination of a pointcut and decorator.
   * Weaver: a place where aspects can be registered and then applied to objects.
     One implementation...
 * CGLIB pieces:
@@ -27,10 +27,10 @@ With that in mind, remaining tasks:
 
 * Handle nulls.
 * Make sure it doesn't do anything for unannotated methods.
-* After advice.
-* Around advice.
+* After decorator.
+* Around decorator.
 * Reject running of method.
-* Consider other kinds of advice.
+* Consider other kinds of decorator.
 * What do we do if two Aspects offer the same Advice? Run it twice, or just once?
 * Add JavaDoc.
 * Package as jar.

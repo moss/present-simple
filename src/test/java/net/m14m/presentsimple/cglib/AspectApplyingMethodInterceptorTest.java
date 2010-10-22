@@ -1,10 +1,10 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.Advice;
+import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodInvocation;
-import net.m14m.presentsimple.Pointcut;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
+import net.m14m.presentsimple.pointcuts.Pointcut;
 import net.sf.cglib.proxy.Enhancer;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class AspectApplyingMethodInterceptorTest {
     private SomeClass objectToEnhance = new SomeClass(log);
 
     @Test public void adviceCanDoStuffBeforeAndAfterTheMethodInvocation() {
-        SomeClass object = enhanceObject(new EveryMethod(), new LoggingAdvice());
+        SomeClass object = enhanceObject(new EveryMethod(), new LoggingDecorator());
 
         object.someMethod(7, "foo");
 
@@ -27,7 +27,7 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     @Test public void ignoresAdviceIfThePointcutDoesNotApply() {
-        SomeClass object = enhanceObject(new NoMethod(), new LoggingAdvice());
+        SomeClass object = enhanceObject(new NoMethod(), new LoggingDecorator());
 
         String result = object.someMethod(7, "foo");
 
@@ -37,9 +37,9 @@ public class AspectApplyingMethodInterceptorTest {
 
     @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() {
         SomeClass object = enhanceObject(
-                new Aspect(new EveryMethod(), new LoggingAdvice("Log 1")),
-                new Aspect(new NoMethod(), new LoggingAdvice("Ignored Log")),
-                new Aspect(new EveryMethod(), new LoggingAdvice("Log 2"))
+                new Aspect(new EveryMethod(), new LoggingDecorator("Log 1")),
+                new Aspect(new NoMethod(), new LoggingDecorator("Ignored Log")),
+                new Aspect(new EveryMethod(), new LoggingDecorator("Log 2"))
         );
 
         object.someMethod(7, "foo");
@@ -53,8 +53,8 @@ public class AspectApplyingMethodInterceptorTest {
         ), log);
     }
 
-    private SomeClass enhanceObject(Pointcut pointcut, Advice advice) {
-        return enhanceObject(new Aspect(pointcut, advice));
+    private SomeClass enhanceObject(Pointcut pointcut, Decorator decorator) {
+        return enhanceObject(new Aspect(pointcut, decorator));
     }
 
     private SomeClass enhanceObject(Aspect... aspects) {
@@ -78,14 +78,14 @@ public class AspectApplyingMethodInterceptorTest {
         }
     }
 
-    private class LoggingAdvice implements Advice {
+    private class LoggingDecorator implements Decorator {
         private String prefix;
 
-        LoggingAdvice(String name) {
+        LoggingDecorator(String name) {
             this.prefix = name + ": ";
         }
 
-        LoggingAdvice() {
+        LoggingDecorator() {
             this.prefix = "";
         }
 

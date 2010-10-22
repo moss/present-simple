@@ -1,5 +1,5 @@
 package net.m14m.presentsimple;
 
-public interface Advice {
+public interface Decorator {
     Object advise(MethodInvocation invocation) throws Throwable;
 }

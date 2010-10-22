@@ -1,17 +1,17 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.Advice;
+import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodInvocation;
 
 import java.lang.reflect.Method;
 
-public class AdviceDecoratedMethodInvocation implements MethodInvocation {
+public class DecoratedMethodInvocation implements MethodInvocation {
     private MethodInvocation invocation;
-    private Advice advice;
+    private Decorator decorator;
 
-    public AdviceDecoratedMethodInvocation(MethodInvocation invocation, Advice advice) {
+    public DecoratedMethodInvocation(MethodInvocation invocation, Decorator decorator) {
         this.invocation = invocation;
-        this.advice = advice;
+        this.decorator = decorator;
     }
 
     public Object getReceiver() {
@@ -27,6 +27,6 @@ public class AdviceDecoratedMethodInvocation implements MethodInvocation {
     }
 
     public Object invoke() throws Throwable {
-        return advice.advise(invocation);
+        return decorator.advise(invocation);
     }
 }

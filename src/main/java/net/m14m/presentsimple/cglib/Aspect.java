@@ -1,21 +1,21 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.Advice;
+import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodInvocation;
-import net.m14m.presentsimple.Pointcut;
+import net.m14m.presentsimple.pointcuts.Pointcut;
 
 public class Aspect {
     private Pointcut pointcut;
-    private Advice advice;
+    private Decorator decorator;
 
-    public Aspect(Pointcut pointcut, Advice advice) {
+    public Aspect(Pointcut pointcut, Decorator decorator) {
         this.pointcut = pointcut;
-        this.advice = advice;
+        this.decorator = decorator;
     }
 
     public MethodInvocation decorate(MethodInvocation invocation) {
         if (!pointcutMatches(invocation)) return invocation;
-        return new AdviceDecoratedMethodInvocation(invocation, advice);
+        return new DecoratedMethodInvocation(invocation, decorator);
     }
 
     private boolean pointcutMatches(MethodInvocation invocation) {

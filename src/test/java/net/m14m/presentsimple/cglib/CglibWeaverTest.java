@@ -1,7 +1,7 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.Advice;
 import net.m14m.presentsimple.AppliesTo;
+import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodInvocation;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +17,8 @@ public class CglibWeaverTest {
 
     @Before public void setUpWeaver() {
         weaver = new CglibWeaver();
-        weaver.register(new LoggedAdvice());
-        weaver.register(new TransactionalAdvice());
+        weaver.register(new LoggingDecorator());
+        weaver.register(new TransactionalDecorator());
     }
 
     @Test public void shouldWeaveAppropriateAspectsIntoClass() {
@@ -34,8 +34,8 @@ public class CglibWeaverTest {
     }
 
     @AppliesTo(Logged.class)
-    private static class LoggedAdvice extends StringDecoratingAdvice {
-        public LoggedAdvice() {
+    private static class LoggingDecorator extends StringFormatDecorator {
+        public LoggingDecorator() {
             super("Logged(%s)");
         }
     }
@@ -45,8 +45,8 @@ public class CglibWeaverTest {
     }
 
     @AppliesTo(Transactional.class)
-    private static class TransactionalAdvice extends StringDecoratingAdvice {
-        public TransactionalAdvice() {
+    private static class TransactionalDecorator extends StringFormatDecorator {
+        public TransactionalDecorator() {
             super("Transactional(%s)");
         }
     }
@@ -61,10 +61,10 @@ public class CglibWeaverTest {
         public String sayHello() { return "sayHello()"; }
     }
 
-    private static class StringDecoratingAdvice implements Advice {
+    private static class StringFormatDecorator implements Decorator {
         private String format;
 
-        public StringDecoratingAdvice(String format) {
+        public StringFormatDecorator(String format) {
             this.format = format;
         }
 

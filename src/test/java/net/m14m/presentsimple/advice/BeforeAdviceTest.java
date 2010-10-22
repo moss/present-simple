@@ -15,7 +15,7 @@ public class BeforeAdviceTest {
     private List<String> log = new ArrayList<String>();
 
     @Test public void runsBeforeTheMethod() throws Throwable {
-        BeforeAdvice advice = new BeforeAdvice() {
+        BeforeDecorator advice = new BeforeDecorator() {
             public void before(Method method, Object[] arguments, Object receiver) {
                 log.add("before");
             }
@@ -31,7 +31,7 @@ public class BeforeAdviceTest {
         final Integer expectedArgument = 5;
         final Object expectedReceiver = this;
 
-        BeforeAdvice advice = new BeforeAdvice() {
+        BeforeDecorator advice = new BeforeDecorator() {
             public void before(Method method, Object[] arguments, Object receiver) {
                 assertEquals("method", expectedMethod, method);
                 assertArrayEquals("arguments", new Object[]{expectedArgument}, arguments);
