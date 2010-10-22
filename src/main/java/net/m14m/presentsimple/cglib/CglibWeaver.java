@@ -21,6 +21,16 @@ public class CglibWeaver implements Weaver {
         return decorator.getClass().getAnnotation(AppliesTo.class).value();
     }
 
+    public <T> T createInstance(Class<T> targetClass) {
+        try {
+            return decorate(targetClass.newInstance());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings({"unchecked"})
     public <T> T decorate(T object) {
         AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(object, arrayOfAspects());

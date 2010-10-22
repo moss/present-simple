@@ -3,5 +3,5 @@ package net.m14m.presentsimple;
 public interface Weaver {
     void register(Decorator decorator);
 
-    <T> T decorate(T object);
+    <T> T createInstance(Class<T> targetClass);
 }

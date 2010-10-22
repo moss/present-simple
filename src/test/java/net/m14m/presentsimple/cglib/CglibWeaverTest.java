@@ -22,7 +22,7 @@ public class CglibWeaverTest {
     }
 
     @Test public void shouldDecorateAnnotatedMethods() {
-        SampleClass sample = weaver.decorate(new SampleClass());
+        SampleClass sample = weaver.createInstance(SampleClass.class);
         assertEquals("Logged(contactServer())", sample.contactServer());
         assertEquals("Transactional(saveChanges())", sample.saveChanges());
         assertEquals("Transactional(Logged(clearDatabase()))", sample.clearDatabase());
