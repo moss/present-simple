@@ -1,6 +1,3 @@
-* Decorate class instead of instance.
-* createClass() on weaver alongside createInstance()
-* Support constructor arguments.
 * Handle nulls.
 * Make sure it doesn't do anything for unannotated methods.
 * After decorator.
