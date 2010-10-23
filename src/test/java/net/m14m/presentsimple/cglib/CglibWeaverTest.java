@@ -13,20 +13,30 @@ import static org.junit.Assert.assertEquals;
 
 
 public class CglibWeaverTest {
-    private CglibWeaver weaver;
+    private SampleClass instance;
 
     @Before public void setUpWeaver() {
-        weaver = new CglibWeaver();
+        CglibWeaver weaver = new CglibWeaver();
         weaver.register(new LoggingDecorator());
         weaver.register(new TransactionalDecorator());
+        instance = weaver.createInstance(SampleClass.class);
     }
 
     @Test public void shouldDecorateAnnotatedMethods() {
-        SampleClass sample = weaver.createInstance(SampleClass.class);
-        assertEquals("Logged(contactServer())", sample.contactServer());
-        assertEquals("Transactional(saveChanges())", sample.saveChanges());
-        assertEquals("Transactional(Logged(clearDatabase()))", sample.clearDatabase());
-        assertEquals("sayHello()", sample.sayHello());
+        assertEquals("Logged(contactServer())", instance.contactServer());
+        assertEquals("Transactional(saveChanges())", instance.saveChanges());
+    }
+
+    @Test public void shouldAllowMultipleAnnotationsOnAMethod() {
+        assertEquals("Transactional(Logged(clearDatabase()))", instance.clearDatabase());
+    }
+
+    @Test public void shouldNotAffectMethodsWithoutAnnotations() {
+        assertEquals("sayHello()", instance.sayHello());
+    }
+
+    @Test public void shouldDecorateInternalMethodCalls() {
+        assertEquals("Transactional(saveChanges()) Transactional(Logged(clearDatabase()))", instance.saveAndClear());
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -57,6 +67,10 @@ public class CglibWeaverTest {
         @Transactional public String saveChanges() { return "saveChanges()"; }
 
         @Logged @Transactional public String clearDatabase() { return "clearDatabase()"; }
+
+        public String saveAndClear() {
+            return saveChanges() + " " + clearDatabase();
+        }
 
         public String sayHello() { return "sayHello()"; }
     }
