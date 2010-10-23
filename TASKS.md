@@ -7,7 +7,6 @@
 * Package as jar.
 * Distribute through Maven somehow?
 * Expose the annotation to annotated aspects, so that it can add metadata?
-* Do we really have to define a no-arg constructor for this to work? Must it be public?
 * Any unit level tests needed for AdviceDecoratedMethodInvocation or AspectInvocationEnhancer? Better names?
 * Profile and optimize?
 * Python swallowing a coffee cup logo.
