@@ -7,16 +7,14 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 public class AspectApplyingMethodInterceptor implements MethodInterceptor {
-    private final Object delegate;
     private final Aspect[] aspects;
 
-    public AspectApplyingMethodInterceptor(Object delegate, Aspect... aspects) {
-        this.delegate = delegate;
+    public AspectApplyingMethodInterceptor(Aspect... aspects) {
         this.aspects = aspects;
     }
 
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        MethodCall call = new ProxiedMethodCall(delegate, method, args, proxy);
+        MethodCall call = new ProxiedMethodCall(obj, method, args, proxy);
         for (Aspect aspect : aspects) {
             call = aspect.decorate(call);
         }

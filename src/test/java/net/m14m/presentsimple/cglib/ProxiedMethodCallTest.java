@@ -11,18 +11,17 @@ import java.lang.reflect.Method;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
-public class ProxiedMethodInvocationTest {
+public class ProxiedMethodCallTest {
     ProxiedMethodCall invocation;
 
     @Before public void setUpInvocation() {
-        final SomeClass instanceBeingDecorated = new SomeClass();
-        SomeClass wrapper = (SomeClass) Enhancer.create(SomeClass.class, new MethodInterceptor() {
+        SomeClass enhancedObject = (SomeClass) Enhancer.create(SomeClass.class, new MethodInterceptor() {
             public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-                invocation = new ProxiedMethodCall(instanceBeingDecorated, method, args, proxy);
+                invocation = new ProxiedMethodCall(obj, method, args, proxy);
                 return "Ignored return value from wrapper";
             }
         });
-        wrapper.someMethod(3, "foo");
+        enhancedObject.someMethod(3, "foo");
     }
 
     @Test public void invokeReturnsValue() throws Throwable {

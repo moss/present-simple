@@ -4,6 +4,7 @@ import net.m14m.presentsimple.AppliesTo;
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.Weaver;
 import net.m14m.presentsimple.pointcuts.AnnotatedPointcut;
+import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 
 import java.lang.annotation.Annotation;
@@ -23,7 +24,7 @@ public class CglibWeaver implements Weaver {
 
     public <T> T createInstance(Class<T> targetClass) {
         try {
-            return decorate(targetClass.newInstance());
+            return decorateClass(targetClass).newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -32,9 +33,14 @@ public class CglibWeaver implements Weaver {
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> T decorate(T object) {
-        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(object, arrayOfAspects());
-        return (T) Enhancer.create(object.getClass(), interceptor);
+    public <T> Class<? extends T> decorateClass(Class<T> targetClass) {
+        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(arrayOfAspects());
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(targetClass);
+        enhancer.setCallbackType(AspectApplyingMethodInterceptor.class);
+        Class<? extends T> enhancedClass = enhancer.createClass();
+        Enhancer.registerCallbacks(enhancedClass, new Callback[]{interceptor});
+        return enhancedClass;
     }
 
     private Aspect[] arrayOfAspects() {

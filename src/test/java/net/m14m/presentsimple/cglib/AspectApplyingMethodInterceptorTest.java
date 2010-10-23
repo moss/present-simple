@@ -5,6 +5,7 @@ import net.m14m.presentsimple.MethodCall;
 import net.m14m.presentsimple.pointcuts.EveryMethod;
 import net.m14m.presentsimple.pointcuts.NoMethod;
 import net.m14m.presentsimple.pointcuts.Pointcut;
+import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import org.junit.Test;
 
@@ -16,9 +17,8 @@ import static org.junit.Assert.assertEquals;
 
 public class AspectApplyingMethodInterceptorTest {
     private List<String> log = new ArrayList<String>();
-    private SomeClass objectToEnhance = new SomeClass(log);
 
-    @Test public void adviceCanDoStuffBeforeAndAfterTheMethodInvocation() {
+    @Test public void adviceCanDoStuffBeforeAndAfterTheMethodInvocation() throws Exception {
         SomeClass object = enhanceObject(new EveryMethod(), new LoggingDecorator());
 
         object.someMethod(7, "foo");
@@ -26,7 +26,7 @@ public class AspectApplyingMethodInterceptorTest {
         assertEquals(Arrays.asList("before", "Number 7 and String foo", "after"), log);
     }
 
-    @Test public void ignoresAdviceIfThePointcutDoesNotApply() {
+    @Test public void ignoresAdviceIfThePointcutDoesNotApply() throws Exception {
         SomeClass object = enhanceObject(new NoMethod(), new LoggingDecorator());
 
         String result = object.someMethod(7, "foo");
@@ -35,7 +35,7 @@ public class AspectApplyingMethodInterceptorTest {
         assertEquals("Number 7 and String foo", result);
     }
 
-    @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() {
+    @Test public void appliesMultipleAspects_FirstAddedIsClosestToTheActualInvocation() throws Exception {
         SomeClass object = enhanceObject(
                 new Aspect(new EveryMethod(), new LoggingDecorator("Log 1")),
                 new Aspect(new NoMethod(), new LoggingDecorator("Ignored Log")),
@@ -53,19 +53,22 @@ public class AspectApplyingMethodInterceptorTest {
         ), log);
     }
 
-    private SomeClass enhanceObject(Pointcut pointcut, Decorator decorator) {
+    private SomeClass enhanceObject(Pointcut pointcut, Decorator decorator) throws Exception {
         return enhanceObject(new Aspect(pointcut, decorator));
     }
 
-    private SomeClass enhanceObject(Aspect... aspects) {
-        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(objectToEnhance, aspects);
-        return (SomeClass) Enhancer.create(SomeClass.class, interceptor);
+    private SomeClass enhanceObject(Aspect... aspects) throws Exception {
+        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(aspects);
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(SomeClass.class);
+        enhancer.setCallbackType(AspectApplyingMethodInterceptor.class);
+        Class enhancedClass = enhancer.createClass();
+        Enhancer.registerCallbacks(enhancedClass, new Callback[]{interceptor});
+        return (SomeClass) enhancedClass.getConstructor(List.class).newInstance(log);
     }
 
     public static class SomeClass {
         private List<String> log;
-
-        public SomeClass() {}
 
         public SomeClass(List<String> log) {
             this.log = log;
