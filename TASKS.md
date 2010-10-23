@@ -3,7 +3,6 @@
 * Around decorator.
 * Reject running of method.
 * Consider other kinds of decorator.
-* What do we do if two Aspects offer the same Advice? Run it twice, or just once?
 * Add JavaDoc.
 * Package as jar.
 * Distribute through Maven somehow?
