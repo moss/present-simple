@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class AspectApplyingMethodInterceptorTest {
+public class AspectInterceptorTest {
     private List<String> log = new ArrayList<String>();
 
     @Test public void adviceCanDoStuffBeforeAndAfterTheMethodInvocation() throws Exception {
@@ -58,10 +58,10 @@ public class AspectApplyingMethodInterceptorTest {
     }
 
     private SomeClass enhanceObject(Aspect... aspects) throws Exception {
-        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(aspects);
+        AspectInterceptor interceptor = new AspectInterceptor(aspects);
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(SomeClass.class);
-        enhancer.setCallbackType(AspectApplyingMethodInterceptor.class);
+        enhancer.setCallbackType(AspectInterceptor.class);
         Class enhancedClass = enhancer.createClass();
         Enhancer.registerCallbacks(enhancedClass, new Callback[]{interceptor});
         return (SomeClass) enhancedClass.getConstructor(List.class).newInstance(log);

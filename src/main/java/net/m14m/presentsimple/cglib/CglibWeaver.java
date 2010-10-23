@@ -34,10 +34,10 @@ public class CglibWeaver implements Weaver {
 
     @SuppressWarnings({"unchecked"})
     public <T> Class<? extends T> decorateClass(Class<T> targetClass) {
-        AspectApplyingMethodInterceptor interceptor = new AspectApplyingMethodInterceptor(arrayOfAspects());
+        AspectInterceptor interceptor = new AspectInterceptor(arrayOfAspects());
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(targetClass);
-        enhancer.setCallbackType(AspectApplyingMethodInterceptor.class);
+        enhancer.setCallbackType(AspectInterceptor.class);
         Class<? extends T> enhancedClass = enhancer.createClass();
         Enhancer.registerCallbacks(enhancedClass, new Callback[]{interceptor});
         return enhancedClass;

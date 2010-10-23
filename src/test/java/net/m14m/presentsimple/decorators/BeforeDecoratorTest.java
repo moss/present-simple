@@ -1,6 +1,6 @@
 package net.m14m.presentsimple.decorators;
 
-import net.m14m.presentsimple.MethodCall;
+import net.m14m.presentsimple.testing.NamedMethodCall;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class BeforeAdviceTest {
+public class BeforeDecoratorTest {
     private List<String> log = new ArrayList<String>();
 
     @Test public void runsBeforeTheMethod() throws Throwable {
@@ -48,39 +48,4 @@ public class BeforeAdviceTest {
         return result;
     }
 
-    public static class NamedMethodCall implements MethodCall {
-        private final Object receiver;
-        private final Object[] arguments;
-        private Method method;
-
-        public NamedMethodCall(Object receiver, String methodName, Object... arguments) throws NoSuchMethodException {
-            this.receiver = receiver;
-            this.arguments = arguments;
-            method = receiver.getClass().getMethod(methodName, argumentTypes());
-        }
-
-        private Class<?>[] argumentTypes() {
-            Class<?>[] argumentTypes = new Class<?>[arguments.length];
-            for (int i = 0; i < arguments.length; i++) {
-                argumentTypes[i] = arguments[i].getClass();
-            }
-            return argumentTypes;
-        }
-
-        public Object getReceiver() {
-            return receiver;
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public Object[] getArguments() {
-            return arguments;
-        }
-
-        public Object invoke() throws Throwable {
-            return method.invoke(receiver, arguments);
-        }
-    }
 }

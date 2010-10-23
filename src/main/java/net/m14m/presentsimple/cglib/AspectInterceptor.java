@@ -6,10 +6,10 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
-public class AspectApplyingMethodInterceptor implements MethodInterceptor {
+public class AspectInterceptor implements MethodInterceptor {
     private final Aspect[] aspects;
 
-    public AspectApplyingMethodInterceptor(Aspect... aspects) {
+    public AspectInterceptor(Aspect... aspects) {
         this.aspects = aspects;
     }
 
