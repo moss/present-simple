@@ -1,4 +1,3 @@
-* Handle nulls.
 * Make sure it doesn't do anything for unannotated methods.
 * After decorator.
 * Around decorator.
