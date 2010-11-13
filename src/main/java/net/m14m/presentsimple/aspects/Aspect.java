@@ -1,8 +1,8 @@
-package net.m14m.presentsimple.cglib;
+package net.m14m.presentsimple.aspects;
 
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodCall;
-import net.m14m.presentsimple.pointcuts.Pointcut;
+import net.m14m.presentsimple.cglib.DecoratedMethodCall;
 
 public class Aspect {
     private Pointcut pointcut;

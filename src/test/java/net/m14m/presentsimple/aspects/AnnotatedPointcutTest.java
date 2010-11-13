@@ -1,4 +1,4 @@
-package net.m14m.presentsimple.pointcuts;
+package net.m14m.presentsimple.aspects;
 
 import org.junit.Test;
 

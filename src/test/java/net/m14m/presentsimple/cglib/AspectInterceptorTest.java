@@ -2,9 +2,10 @@ package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodCall;
-import net.m14m.presentsimple.pointcuts.EveryMethod;
-import net.m14m.presentsimple.pointcuts.NoMethod;
-import net.m14m.presentsimple.pointcuts.Pointcut;
+import net.m14m.presentsimple.aspects.Aspect;
+import net.m14m.presentsimple.aspects.EveryMethod;
+import net.m14m.presentsimple.aspects.NoMethod;
+import net.m14m.presentsimple.aspects.Pointcut;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import org.junit.Test;

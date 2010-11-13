@@ -1,6 +1,7 @@
 package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.MethodCall;
+import net.m14m.presentsimple.aspects.Aspect;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 

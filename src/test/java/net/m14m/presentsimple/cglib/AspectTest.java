@@ -2,7 +2,8 @@ package net.m14m.presentsimple.cglib;
 
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodCall;
-import net.m14m.presentsimple.pointcuts.AnnotatedPointcut;
+import net.m14m.presentsimple.aspects.AnnotatedPointcut;
+import net.m14m.presentsimple.aspects.Aspect;
 import net.m14m.presentsimple.testing.NamedMethodCall;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,25 +1,16 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.AppliesTo;
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.Weaver;
-import net.m14m.presentsimple.pointcuts.AnnotatedPointcut;
+import net.m14m.presentsimple.aspects.AspectRegistry;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
 public class CglibWeaver implements Weaver {
-    private List<Aspect> aspects = new ArrayList<Aspect>();
+    private final AspectRegistry aspectRegistry = new AspectRegistry();
 
     public void register(Decorator decorator) {
-        aspects.add(new Aspect(new AnnotatedPointcut(findAnnotation(decorator)), decorator));
-    }
-
-    private Class<? extends Annotation> findAnnotation(Decorator decorator) {
-        return decorator.getClass().getAnnotation(AppliesTo.class).value();
+        aspectRegistry.register(decorator);
     }
 
     public <T> T createInstance(Class<T> targetClass) {
@@ -34,16 +25,12 @@ public class CglibWeaver implements Weaver {
 
     @SuppressWarnings({"unchecked"})
     public <T> Class<? extends T> decorateClass(Class<T> targetClass) {
-        AspectInterceptor interceptor = new AspectInterceptor(arrayOfAspects());
+        AspectInterceptor interceptor = new AspectInterceptor(aspectRegistry.aspectArray());
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(targetClass);
         enhancer.setCallbackType(AspectInterceptor.class);
+        enhancer.setSuperclass(targetClass);
         Class<? extends T> enhancedClass = enhancer.createClass();
         Enhancer.registerCallbacks(enhancedClass, new Callback[]{interceptor});
         return enhancedClass;
-    }
-
-    private Aspect[] arrayOfAspects() {
-        return aspects.toArray(new Aspect[aspects.size()]);
     }
 }
