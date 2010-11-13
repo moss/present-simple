@@ -3,5 +3,5 @@ package net.m14m.presentsimple;
 public interface Weaver {
     void register(Decorator decorator);
 
-    <T> T createInstance(Class<T> targetClass);
+    <T> T createInstance(Class<T> targetClass) throws InstantiationException, IllegalAccessException;
 }

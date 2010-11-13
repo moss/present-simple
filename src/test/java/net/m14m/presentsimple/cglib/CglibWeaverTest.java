@@ -19,23 +19,23 @@ public class CglibWeaverTest {
         weaver.register(new TransactionalDecorator());
     }
 
-    @Test public void shouldDecorateAnnotatedMethods() {
+    @Test public void shouldDecorateAnnotatedMethods() throws Exception {
         SampleClass instance = weaver.createInstance(SampleClass.class);
         assertEquals("Logged(contactServer())", instance.contactServer());
         assertEquals("Transactional(saveChanges())", instance.saveChanges());
     }
 
-    @Test public void shouldAllowMultipleAnnotationsOnAMethod() {
+    @Test public void shouldAllowMultipleAnnotationsOnAMethod() throws Exception {
         SampleClass instance = weaver.createInstance(SampleClass.class);
         assertEquals("Transactional(Logged(clearDatabase()))", instance.clearDatabase());
     }
 
-    @Test public void shouldNotAffectMethodsWithoutAnnotations() {
+    @Test public void shouldNotAffectMethodsWithoutAnnotations() throws Exception {
         SampleClass instance = weaver.createInstance(SampleClass.class);
         assertEquals("sayHello()", instance.sayHello());
     }
 
-    @Test public void shouldDecorateInternalMethodCalls() {
+    @Test public void shouldDecorateInternalMethodCalls() throws Exception {
         SampleClass instance = weaver.createInstance(SampleClass.class);
         assertEquals("Transactional(saveChanges()) Transactional(Logged(clearDatabase()))", instance.saveAndClear());
     }

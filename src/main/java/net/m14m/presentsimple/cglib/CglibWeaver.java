@@ -13,14 +13,8 @@ public class CglibWeaver implements Weaver {
         aspectRegistry.register(decorator);
     }
 
-    public <T> T createInstance(Class<T> targetClass) {
-        try {
-            return decorateClass(targetClass).newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    public <T> T createInstance(Class<T> targetClass) throws InstantiationException, IllegalAccessException {
+        return decorateClass(targetClass).newInstance();
     }
 
     @SuppressWarnings({"unchecked"})
