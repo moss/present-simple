@@ -17,9 +17,14 @@ public class AspectInterceptor implements MethodInterceptor {
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         MethodCall call = new ProxiedMethodCall(obj, method, args, proxy);
         for (Aspect aspect : aspects) {
-            call = aspect.decorate(call);
+            call = decorate(call, aspect);
         }
         return call.invoke();
+    }
+
+    private MethodCall decorate(MethodCall call, Aspect aspect) {
+        if (!aspect.pointcutMatches(call)) return call;
+        return new DecoratedMethodCall(call, aspect.getDecorator());
     }
 
 }

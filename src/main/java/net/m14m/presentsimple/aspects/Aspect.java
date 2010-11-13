@@ -2,7 +2,6 @@ package net.m14m.presentsimple.aspects;
 
 import net.m14m.presentsimple.Decorator;
 import net.m14m.presentsimple.MethodCall;
-import net.m14m.presentsimple.cglib.DecoratedMethodCall;
 
 public class Aspect {
     private Pointcut pointcut;
@@ -13,12 +12,11 @@ public class Aspect {
         this.decorator = decorator;
     }
 
-    public MethodCall decorate(MethodCall call) {
-        if (!pointcutMatches(call)) return call;
-        return new DecoratedMethodCall(call, decorator);
+    public boolean pointcutMatches(MethodCall call) {
+        return pointcut.matches(call.getMethod());
     }
 
-    private boolean pointcutMatches(MethodCall call) {
-        return pointcut.matches(call.getMethod());
+    public Decorator getDecorator() {
+        return decorator;
     }
 }

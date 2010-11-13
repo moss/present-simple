@@ -11,33 +11,29 @@ import org.junit.Test;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+@SuppressWarnings({"UnusedDeclaration"})
 public class AspectTest {
-    private static final String DECORATED_RESULT = "decorated";
-    private static final String UNDECORATED_RESULT = "not decorated";
     private Aspect aspect;
 
     @Before public void setUp() throws Exception {
         aspect = new Aspect(new AnnotatedPointcut(Sample.class), new SimpleDecorator());
     }
 
-    @Test public void decoratesMethodsMatchingThePointcut() throws Throwable {
-        MethodCall call = aspect.decorate(new NamedMethodCall(this, "decorateMe"));
-        assertEquals(DECORATED_RESULT, call.invoke());
+    @Test public void matchesMethodsMatchingThePointcut() throws Throwable {
+        assertTrue(aspect.pointcutMatches(new NamedMethodCall(this, "decorateMe")));
     }
 
-    @Test public void doesNotDecorateOtherMethods() throws Throwable {
-        MethodCall call = aspect.decorate(new NamedMethodCall(this, "doNotDecorateMe"));
-        assertEquals(UNDECORATED_RESULT, call.invoke());
+    @Test public void doesNotMatchOtherMethods() throws Throwable {
+        assertFalse(aspect.pointcutMatches(new NamedMethodCall(this, "doNotDecorateMe")));
     }
 
-    @Sample public String decorateMe() {
-        return UNDECORATED_RESULT;
+    @Sample public void decorateMe() {
     }
 
-    public String doNotDecorateMe() {
-        return UNDECORATED_RESULT;
+    public void doNotDecorateMe() {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -46,7 +42,7 @@ public class AspectTest {
 
     private static class SimpleDecorator implements Decorator {
         public Object intercept(MethodCall call) throws Throwable {
-            return DECORATED_RESULT;
+            return null;
         }
     }
 }
