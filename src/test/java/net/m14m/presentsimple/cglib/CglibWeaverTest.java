@@ -1,13 +1,11 @@
 package net.m14m.presentsimple.cglib;
 
-import net.m14m.presentsimple.AppliesTo;
-import net.m14m.presentsimple.Decorator;
-import net.m14m.presentsimple.MethodCall;
+import net.m14m.presentsimple.testing.samples.Logged;
+import net.m14m.presentsimple.testing.samples.LoggingDecorator;
+import net.m14m.presentsimple.testing.samples.SampleClass;
+import net.m14m.presentsimple.testing.samples.TransactionalDecorator;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -46,42 +44,6 @@ public class CglibWeaverTest {
         Class<? extends NoDefaultConstructor> decoratedClass = weaver.decorateClass(NoDefaultConstructor.class);
         NoDefaultConstructor instance = decoratedClass.getConstructor(String.class).newInstance("foo");
         assertEquals("Logged(constructor parameter: foo)", instance.showConstructorParameter());
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Logged {
-    }
-
-    @AppliesTo(Logged.class)
-    private static class LoggingDecorator implements Decorator {
-        public Object intercept(MethodCall call) throws Throwable {
-            return String.format("Logged(%s)", call.invoke());
-        }
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Transactional {
-    }
-
-    @AppliesTo(Transactional.class)
-    private static class TransactionalDecorator implements Decorator {
-        public Object intercept(MethodCall call) throws Throwable {
-            return String.format("Transactional(%s)", call.invoke());
-        }
-    }
-
-    public static class SampleClass {
-        @Logged public String contactServer() { return "contactServer()"; }
-
-        @Transactional public String saveChanges() { return "saveChanges()"; }
-
-        @Logged @Transactional public String clearDatabase() { return "clearDatabase()"; }
-
-        public String saveAndClear() {
-            return saveChanges() + " " + clearDatabase();
-        }
-
-        public String sayHello() { return "sayHello()"; }
     }
 
     public static class NoDefaultConstructor {
